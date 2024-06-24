@@ -1,0 +1,80 @@
+"use client"
+
+import BreadcrumbDashboard from "@/components/block/BreadcrumbDashboard"
+import { Button } from "@/components/ui/button"
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
+import Link from "next/link"
+import { useParams, useRouter } from "next/navigation"
+import Swal from "sweetalert2"
+
+export default function EditClass() {
+    const { slug } = useParams()
+
+    const breadcrumd = [
+        { name: "Tutor", link: "/tutor/dashbaord" },
+        { name: "Dashboard", link: "/tutor/dashboard" },
+        { name: "Edit Kelas " + slug, link: "/tutor/dashboard/edit-class" },
+    ]
+
+    const router = useRouter()
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        Swal.fire({
+            title: "Kelas Berhasil Dibuat",
+            icon: "success",
+            confirmButtonText: "OK",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                router.push(`/tutor/dashboard`)
+            }
+        })
+    }
+    return (
+        <main>
+            <section>
+                <div className="container py-10">
+                    <BreadcrumbDashboard data={breadcrumd} />
+                    <Card className="max-w-md mx-auto mt-8">
+                        <CardHeader>
+                            <CardTitle>Edit Kelas {slug}</CardTitle>
+                        </CardHeader>
+                        <CardContent >
+                            <form onSubmit={handleSubmit}>
+                                <div className="grid w-full items-center gap-4">
+                                    <div className="flex flex-col space-y-1.5">
+                                        <Label htmlFor="upload-image">Unggah Gambar</Label>
+                                        <Input id="upload-image" type="file" className="cursor-pointer" />
+                                    </div>
+                                    <div className="flex flex-col space-y-1.5">
+                                        <Label htmlFor="title">Judul Kelas</Label>
+                                        <Input id="title" type="text" placeholder="Kelas Kalkulus" />
+                                    </div>
+                                    <div className="flex flex-col space-y-1.5">
+                                        <Label htmlFor="description">Description</Label>
+                                        <Textarea id="description" placeholder="Tulis deskripsi kelas anda" />
+                                    </div>
+                                    <div className="flex flex-col space-y-1.5">
+                                        <Label htmlFor="price">Harga</Label>
+                                        <Input id="price" type="number" placeholder="Harga kelas" />
+                                    </div>
+                                    <Button type="submit">Buat Kelas</Button>
+                                </div>
+                            </form>
+                        </CardContent>
+                    </Card>
+                </div>
+            </section>
+        </main>
+    )
+}
